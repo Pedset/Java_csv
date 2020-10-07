@@ -22,12 +22,12 @@ public class tableui {
 	static ArrayList<ArrayList<String>> currentSheet;
 	static JMenuBar	menubar 	 =  new JMenuBar();
 	static JMenu[]	menu 		 = {new JMenu("File"), new JMenu("Edit")};
-	static JMenuItem[] menuItems = {new JMenuItem("Open File..."),new JMenuItem("Save"), new JMenuItem("Add New Row"),new JMenuItem("Delete Selected Row"),new JMenuItem("Add Column"), new JMenuItem("Delete Selected Column")};
-	private static final String[] btnCommands = { "open", "save", "addRow", "delRow", "addCol", "delCol"};
+	static JMenuItem[] menuItems = {new JMenuItem("Open File..."),new JMenuItem("Save"), new JMenuItem("Add New Row"),new JMenuItem("Delete Selected Row"),new JMenuItem("Add Column"), new JMenuItem("Delete Selected Column"), new JMenuItem("Sort")};
+	private static final String[] btnCommands = { "open", "save", "addRow", "delRow", "addCol", "delCol", "sort"};
 	
 	
 		public tableui()  {
-			updateValues(readCSV.getWholeSheet());
+			updateValues(readCSV.getWholeSheet(), 1);
 			createTable();
 			}
 	
@@ -36,22 +36,26 @@ public class tableui {
 			}
 	
 	
-		public static void updateValues(ArrayList<ArrayList<String>> sheet){
+		public static void updateValues(ArrayList<ArrayList<String>> sheet, int shift){
 	
 			currentSheet = sheet;
 			int colNum = (sheet.get(0).size());
 			
-			myArray = new String[sheet.toArray().length-1][colNum];
+			myArray = new String[sheet.toArray().length-shift][colNum];
 			
-			for(int i = 1; i < sheet.toArray().length ; i++) {
+			for(int i = shift; i < sheet.toArray().length ; i++) {
 			    ArrayList<String> row = new ArrayList<>();
 			    row = sheet.get(i);
-			    myArray[i-1] =  row.toArray(new String[colNum]);
+			    myArray[i-shift] =  row.toArray(new String[colNum]);
 				} 
 			}
 
+		public static String[][] getMyArray() {
+			return myArray;
+		}
+
 		public static void changedT() {
-			updateValues(readCSV.getWholeSheet());
+			updateValues(readCSV.getWholeSheet(), 1);
 			if(table != null) {
 				table.setModel((new DefaultTableModel(myArray,currentSheet.get(0).toArray())));
 				}
@@ -79,7 +83,6 @@ public class tableui {
 		  	 jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			 table = new JTable (new DefaultTableModel(myArray,currentSheet.get(0).toArray()));
 			 table.setBounds(30,40,200,300);
-			 table.setAutoCreateRowSorter(true);
 			 JScrollPane scrollPane = new JScrollPane (table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			 table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			 jf.add(scrollPane);
@@ -97,6 +100,7 @@ public class tableui {
 					if(colName != null && !colName.isEmpty()) new addCol(colName);
 					}
 				else if (e.getActionCommand() == "delCol")	  new delCol();
+				else if (e.getActionCommand() == "sort")	  new comparatorTest();
 				}
 			}
 	}

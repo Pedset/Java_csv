@@ -19,7 +19,7 @@ public class saveFile {
 				if (x != nCol-1) sb.append(",");
 			}
 			sb.append(System.getProperty("line.separator"));
-			for (int i = 1 ; i < nRow ; i++) {
+			for (int i = 0 ; i < nRow ; i++) {
 				for (int j = 0 ; j < nCol ; j++) {
 					if(dtm.getValueAt(i,j) != null) sb.append(dtm.getValueAt(i,j));
 					else sb.append(" ");
@@ -37,7 +37,8 @@ public class saveFile {
 			
 		}catch(Exception e) {
 			System.out.println("Something went wrong trying to save the file /n" + e);
-			JOptionPane.showMessageDialog(null, "Failed to save the file.");
+			JOptionPane.showMessageDialog(null, "Something went wrong trying to save the file!",
+				      "Error!", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}

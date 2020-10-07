@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -40,6 +41,8 @@ public class readCSV {
 				loadCSV(scanner);
 			}catch(Exception e) {
 			   System.out.println("Something went wrong with readingCSV /n" + e);
+			   JOptionPane.showMessageDialog(null, "Something went wrong with reading CSV!",
+					      "Error!", JOptionPane.ERROR_MESSAGE);
 		   	}
 		}
 
