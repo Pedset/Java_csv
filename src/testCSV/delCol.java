@@ -5,49 +5,34 @@ import javax.swing.table.DefaultTableModel;
 
 public class delCol {
 	
-	
-	public Object[][] getTableData (JTable table) {
-	    DefaultTableModel dtm = (DefaultTableModel) table.getModel();
-	    int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
-	    Object[][] tableData = new Object[nRow][nCol];
-	    for (int x = 0 ; x < nCol ; x++) {
-	    	tableData[0][x] =(dtm.getColumnName(x));
-		}
-	    for (int i = 1 ; i < nRow ; i++)
-	        for (int j = 0 ; j < nCol ; j++)
-	            tableData[i][j] = dtm.getValueAt(i,j);
-	    return tableData;
-	}
-	
 	public delCol(){
-		
-		JTable table = tableui.getTable();
-		
-		int[] cols = table.getSelectedColumns();
-		
-		Object[][] obTable = getTableData(tableui.getTable());
-		
-		if (cols.length > 0) {
-			Object[][] newTableData = new Object[obTable.length][(obTable[0].length-cols.length)];
-			
-				for (int y = 0 ; y < obTable.length ; y++) {
-					int counter = 0;
-					for (int z = 0; z < obTable[0].length; z++) {
-						boolean hit = false;
-						for (int l = 0 ; l < cols.length ; l++) {
-							if (z == cols[l]) {
-							 hit = true;
-								}
-							}
-						if (hit) {
-							continue;
-							}
-						newTableData[y][counter] = obTable[y][z];
-						counter++;
-					}
+		JTable currentTable = tableui.getTable();
+	    int[] colsToDelete = currentTable.getSelectedColumns();
+	    int nRow = currentTable.getRowCount(), nCol = (currentTable.getColumnCount()-colsToDelete.length);
+	    Object[][] newTableData = new Object[nRow][nCol];
+	    int colCounter = 0;
+	    for (int x = 0 ; x < currentTable.getColumnCount() ; x++) {
+	    	boolean hit = false;
+	    	for (int l = 0 ; l < colsToDelete.length ; l++) {
+				if (x == colsToDelete[l]) hit = true;
 				}
-			
-			table.setModel((new DefaultTableModel(newTableData,newTableData[0])));
-		}
+	    		if (hit) continue;
+	    	newTableData[0][colCounter] =(currentTable.getColumnName(x));
+	    	colCounter++;
+	    }
+	    for (int i = 1 ; i < nRow ; i++) {
+	    	colCounter = 0;
+	    	for (int j = 0 ; j < currentTable.getColumnCount() ; j++) {
+	    		boolean hit = false;
+		    	for (int l = 0 ; l < colsToDelete.length ; l++) {
+					if (j == colsToDelete[l]) hit = true;
+					}
+		    		if (hit) continue;
+		    		newTableData[i][colCounter] = currentTable.getValueAt(i,j);
+		    		colCounter++;
+	    		} 
+	    	}
+	    currentTable.setModel((new DefaultTableModel(newTableData,newTableData[0])));
 	}
 }
+
